@@ -8,32 +8,43 @@ import './index.css';
 
 
 function Square(props) {
-    return (
-        <button className="square" onClick={props.onClick}>
-            {props.value}
-        </button>
-    );
+    if (isInArray(props.location, props.winSquares)) {  // highlight the squares that cause to win
+        return (
+            <button className="square" onClick={props.onClick}>
+                <mark>{props.value}</mark>
+            </button>
+        );
+    } else {
+        return (
+            <button className="square" onClick={props.onClick}>
+                {props.value}
+            </button>
+        );
+    }
 }
 
 class Board extends React.Component {
     renderSquare(i) {
         return (
             <Square
+                key={i}
                 value={this.props.squares[i]}
                 onClick={() => this.props.onClick(i)}
+                location={i}
+                winSquares={this.props.winSquares}
             />
         );
     }
 
     render() {  // rewrite Board to use two loops to make the squares instead of hardcoding them
-        var board = [];
+        let board = [];
         for (let i = 0; i < 3; i++) {
             let row = [];
             for (let j = 0; j < 3; j++) {
                 row.push(this.renderSquare(i * 3 + j))
             }
             board.push(
-                <div className="board-row">
+                <div className="board-row" key={i}>
                     {row}
                 </div>
             );
@@ -52,7 +63,7 @@ class Game extends React.Component {
         super();
         this.state = {
             history: [{
-                squares: Array(9).fill(null),
+                squares: new Array(9).fill(null),
             }],
             stepNumber: 0,
             xIsNext: true,
@@ -91,7 +102,11 @@ class Game extends React.Component {
     render() {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
-        const winner = calculateWinner(current.squares);
+        const winSquares = calculateWinner(current.squares);
+        let winner = null;
+        if (winSquares) {
+            winner = current.squares[winSquares[0]];
+        }
 
         const moves = history.map((step, move) => {
             const desc = move ?
@@ -125,6 +140,7 @@ class Game extends React.Component {
                     <Board
                         squares={current.squares}
                         onClick={(i) => this.handleClick(i)}
+                        winSquares={winSquares}
                     />
                 </div>
                 <div className="game-info">
@@ -157,9 +173,17 @@ function calculateWinner(squares) {
     for (let i = 0; i < lines.length; i++) {
         const [a, b, c] = lines[i];
         if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-            return squares[a];
+            return [a, b, c];  // get the squares which should be highlighted
         }
     }
 
     return null;
+}
+
+function isInArray(value, array) {  // helper function
+    if (array === null) {
+        return false;
+    }
+
+    return array.indexOf(value) > -1;
 }
