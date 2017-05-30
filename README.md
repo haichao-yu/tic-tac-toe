@@ -1,5 +1,9 @@
 This is a classic Tic-Tac-Toe game built with React.
 
+The point of this project is to help you understand some key ideas of React:
+* Passing data through props
+* Lifting state up
+* Controlled component
 
 
 ## Features
