@@ -68,8 +68,8 @@ class Game extends React.Component {
     handleClick(i) {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[history.length - 1];
-        const squares = current.squares.slice();  /* We call .slice() to copy the squares array instead of mutating the existing array. */
-        if (calculateWinner(squares) || squares[i]) {  /* early return */
+        const squares = current.squares.slice();  // we call .slice() to copy the squares array instead of mutating the existing array
+        if (calculateWinner(squares) || squares[i]) {  // early return
             return;
         }
         squares[i] = this.state.xIsNext? 'X' : 'O';
@@ -98,11 +98,19 @@ class Game extends React.Component {
             const desc = move ?
                 "Move #" + move :
                 'Game start';
-            return (
-                <li key={move}>
-                    <a href="#" onClick={() => this.jumpTo(move)}>{desc}</a>
-                </li>
-            );
+            if (move === this.state.stepNumber) {  // bold the currently-selected item in the move list
+                return (
+                    <li key={move}>
+                        <strong><a href="#" onClick={() => this.jumpTo(move)}>{desc}</a></strong>
+                    </li>
+                );
+            } else {
+                return (
+                    <li key={move}>
+                        <a href="#" onClick={() => this.jumpTo(move)}>{desc}</a>
+                    </li>
+                );
+            }
         });
 
         let status;
