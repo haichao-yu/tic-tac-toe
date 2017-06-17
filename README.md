@@ -17,6 +17,16 @@ The point of this project is to help you understand some key ideas of React:
 
 
 
+## Setup
+
+Install all dependencies with this command:
+
+```
+npm install
+```
+
+
+
 ## Usage
 
 Start the development server with this command:
@@ -26,14 +36,6 @@ npm start
 ```
 
 
-
-## Setup
-
-Install all dependencies with this command:
-
-```
-npm install
-```
 
 ## Reference
 
